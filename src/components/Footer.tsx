@@ -4,7 +4,7 @@ export default function Footer() {
       <hr />
       <div className="container">
         <small className="text-muted">
-          Repo:&nbsp;
+          Repository:&nbsp;
           <a href="https://github.com/dev-yoonjung/keycloak-with-next">
             https://github.com/dev-yoonjung/keycloak-with-next
           </a>
