@@ -1,0 +1,35 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes: 
+      - ./database/data:/var/lib/postgresql/data
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy # when use M1 chip
+    ports:
+      - 8000:8080
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: user
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/nextrealm.json
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      # JDBC_PARAMS: "ssl=true"
+    command:
+      - "-b 0.0.0.0"
+    volumes:
+      - "./nextrealm.json:/opt/jboss/keycloak/nextrealm.json"
+    depends_on:
+      - postgres
