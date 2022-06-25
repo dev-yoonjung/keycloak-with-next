@@ -47,6 +47,9 @@ export default function Header() {
         <Link href="/" className="p-2 text-dark">
           Home
         </Link>
+        <Link href="/profile" className="p-2 text-dark">
+          Profile
+        </Link>
       </nav>
       {keycloak?.authenticated ? (
         <>
