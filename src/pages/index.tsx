@@ -2,8 +2,14 @@ import { useKeycloak } from '@react-keycloak-fork/ssr'
 
 import Layout from '@/components/Layout'
 
+import type { KeycloakTokenParsed } from 'keycloak-js'
+
 interface IStatus {
   authenticated: boolean
+}
+
+type TUser = KeycloakTokenParsed & {
+  name?: string
 }
 
 function Status({ authenticated }: IStatus) {
@@ -24,6 +30,11 @@ function Status({ authenticated }: IStatus) {
 
 export default function Home() {
   const { keycloak } = useKeycloak()
+  const user: TUser | undefined = keycloak?.tokenParsed
+
+  const message = !!user
+    ? `Welcome back ${user.name}`
+    : 'Welcome visitor. Please login to continue.'
 
   return (
     <Layout title="Home | Next.js + Keycloak Example">
@@ -33,6 +44,7 @@ export default function Home() {
       </div>
 
       <Status authenticated={!!keycloak?.authenticated} />
+      <p>{message}</p>
     </Layout>
   )
 }
