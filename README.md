@@ -13,3 +13,18 @@ It uses Typescript, taking advantage of the typings provided by [Keycloak's JS A
 
 ## Getting Started
 
+### Launch the Keycloak server
+
+```
+$ cd keycloak
+
+$ docker-compose up -d
+```
+
+### Start the web client
+
+```
+$ yarn install
+
+$ yarn dev
+```
