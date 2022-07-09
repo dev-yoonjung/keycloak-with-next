@@ -1,39 +1,38 @@
-import { useKeycloak } from '@react-keycloak-fork/ssr'
+import { useSession } from 'next-auth/react'
 
 import Layout from '@/components/Layout'
 
-import type { KeycloakTokenParsed } from 'keycloak-js'
+function Status({
+  status,
+}: {
+  status: 'loading' | 'authenticated' | 'unauthenticated'
+}) {
+  switch (status) {
+    case 'loading':
+      return <p>Loading...</p>
+    case 'authenticated':
+      return (
+        <p>
+          You are <span className="text-success">logged in</span>
+        </p>
+      )
+    case 'unauthenticated':
+      return (
+        <p>
+          You are <span className="text-danger">not logged in</span>
+        </p>
+      )
 
-interface IStatus {
-  authenticated: boolean
-}
-
-type TUser = KeycloakTokenParsed & {
-  name?: string
-}
-
-function Status({ authenticated }: IStatus) {
-  if (authenticated) {
-    return (
-      <p>
-        You are <span className="text-success">logged in</span>
-      </p>
-    )
+    default:
+      return <></>
   }
-
-  return (
-    <p>
-      You are <span className="text-danger">not logged in</span>
-    </p>
-  )
 }
 
 export default function Home() {
-  const { keycloak } = useKeycloak()
-  const user: TUser | undefined = keycloak?.tokenParsed
+  const { data: session, status } = useSession()
 
-  const message = !!user
-    ? `Welcome back ${user.name}`
+  const message = !!session
+    ? `Welcome back ${session.user?.name ?? ''}!`
     : 'Welcome visitor. Please login to continue.'
 
   return (
@@ -43,7 +42,7 @@ export default function Home() {
         This is an example of a Next.js site using Keycloak.
       </div>
 
-      <Status authenticated={!!keycloak?.authenticated} />
+      <Status status={status} />
       <p>{message}</p>
     </Layout>
   )

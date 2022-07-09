@@ -1,42 +1,10 @@
-import { useKeycloak } from '@react-keycloak-fork/ssr'
+import { useSession, signIn, signOut } from 'next-auth/react'
+import axios from 'axios'
 
 import Link from 'next/link'
 
 export default function Header() {
-  const { keycloak } = useKeycloak()
-
-  const onSignup = () => {
-    const signupUrl = keycloak?.createRegisterUrl()
-    if (!!signupUrl) {
-      window.location.href = signupUrl
-    }
-  }
-
-  const onLogin = () => {
-    const loginUrl = keycloak?.createLoginUrl()
-    if (!!loginUrl) {
-      window.location.href = loginUrl
-    }
-  }
-
-  const onLogout = () => {
-    const logoutUrl = keycloak?.createLogoutUrl()
-    if (!!logoutUrl) {
-      window.location.href = logoutUrl
-      const cookies = document.cookie.split(';')
-      for (const cookie of cookies) {
-        const name = cookie.replace(/=.*/, '').trim()
-        document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT`
-      }
-    }
-  }
-
-  const onMyAccount = () => {
-    const accountUrl = keycloak?.createAccountUrl()
-    if (!!accountUrl) {
-      window.location.href = accountUrl
-    }
-  }
+  const { data: session } = useSession()
 
   return (
     <header className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
@@ -51,18 +19,11 @@ export default function Header() {
           Profile
         </Link>
       </nav>
-      {keycloak?.authenticated ? (
+      {!!session ? (
         <>
           <button
             type="button"
-            onClick={onMyAccount}
-            className="mx-2 btn btn-outline-primary"
-          >
-            My Account
-          </button>
-          <button
-            type="button"
-            onClick={onLogout}
+            onClick={() => signOut()}
             className="mx-2 btn btn-outline-primary"
           >
             Logout
@@ -72,14 +33,7 @@ export default function Header() {
         <>
           <button
             type="button"
-            onClick={onSignup}
-            className="mx-2 btn btn-outline-primary"
-          >
-            Sign Up
-          </button>
-          <button
-            type="button"
-            onClick={onLogin}
+            onClick={() => signIn('keycloak')}
             className="mx-2 btn btn-outline-primary"
           >
             Login
