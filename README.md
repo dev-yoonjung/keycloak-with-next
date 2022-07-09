@@ -9,7 +9,7 @@
 
 This is a simple project demonstrating how to integrate a Next.js app with [Keycloak](https://www.keycloak.org).
 
-It uses Typescript, taking advantage of the typings provided by [Keycloak's JS Adapter](https://www.npmjs.com/package/keycloak-js) and [tobiasfrei's react-keycloak](https://www.npmjs.com/package/@react-keycloak-fork/ssr) package.
+It uses Typescript, taking advantage of the typings provided by [next-auth](https://www.npmjs.com/package/next-auth) package.
 
 ## Getting Started
 
