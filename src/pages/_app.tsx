@@ -4,17 +4,13 @@ import '@/styles/index.css'
 import cookie from 'cookie'
 import { SSRKeycloakProvider, SSRCookies } from '@react-keycloak-fork/ssr'
 
+import { KEYCLOAK_CONFIG } from '@/constants/keycloakConfig'
+
 import type { AppProps, AppContext } from 'next/app'
 import type { IncomingMessage } from 'http'
 
 interface InitialProps {
   cookies: unknown
-}
-
-const keycloakConfig = {
-  realm: 'next',
-  url: 'http://localhost:8000/auth',
-  clientId: 'next-client',
 }
 
 export default function App({
@@ -24,8 +20,12 @@ export default function App({
 }: AppProps & InitialProps) {
   return (
     <SSRKeycloakProvider
-      keycloakConfig={keycloakConfig}
+      keycloakConfig={KEYCLOAK_CONFIG}
       persistor={SSRCookies(cookies)}
+      initOptions={{
+        onLoad: 'check-state',
+        checkLoginIframe: false,
+      }}
     >
       <Component {...pageProps} />
     </SSRKeycloakProvider>
